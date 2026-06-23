@@ -5,6 +5,7 @@ import { VN_SYMBOLS, CRYPTO_SYMBOLS, SymbolConfig } from '@/lib/symbols';
 import PriceChart from './PriceChart';
 import SymbolChat from './SymbolChat';
 import SymbolSearch from './SymbolSearch';
+import SentimentChart from './SentimentChart';
 
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
@@ -66,8 +67,9 @@ export default function LiveDashboard() {
 
       {/* Chart + Chat */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-4">
           <PriceChart symbol={selected} />
+          <SentimentChart symbol={selected} />
         </div>
         <div className="lg:col-span-1">
           <SymbolChat symbol={selected} />
