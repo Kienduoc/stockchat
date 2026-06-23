@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { VN_SYMBOLS, CRYPTO_SYMBOLS, SymbolConfig } from '@/lib/symbols';
 import PriceChart from './PriceChart';
 import SymbolChat from './SymbolChat';
+import SymbolSearch from './SymbolSearch';
 
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
@@ -16,7 +17,7 @@ export default function LiveDashboard() {
       {/* Tab */}
       <div className="flex gap-2">
         <button
-          onClick={() => setTab('vn')}
+          onClick={() => { setTab('vn'); setSelected(VN_SYMBOLS[0]); }}
           className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
             tab === 'vn'
               ? 'bg-red-600 text-white'
@@ -26,7 +27,7 @@ export default function LiveDashboard() {
           🇻🇳 Cổ phiếu VN
         </button>
         <button
-          onClick={() => setTab('crypto')}
+          onClick={() => { setTab('crypto'); setSelected(CRYPTO_SYMBOLS[0]); }}
           className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
             tab === 'crypto'
               ? 'bg-orange-500 text-white'
@@ -37,8 +38,13 @@ export default function LiveDashboard() {
         </button>
       </div>
 
-      {/* Chọn mã */}
-      <div className="flex gap-2 flex-wrap">
+      {/* Ô tìm kiếm đầy đủ */}
+      <SymbolSearch market={tab} onSelect={setSelected} />
+
+      {/* Mã phổ biến */}
+      <div>
+        <p className="text-xs text-gray-400 mb-2">⭐ Phổ biến (hoặc tìm bất kỳ mã nào ở trên)</p>
+        <div className="flex gap-2 flex-wrap">
         {list.map((s) => (
           <button
             key={s.id}
@@ -55,6 +61,7 @@ export default function LiveDashboard() {
             </span>
           </button>
         ))}
+        </div>
       </div>
 
       {/* Chart + Chat */}

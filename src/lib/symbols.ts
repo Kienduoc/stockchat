@@ -6,6 +6,7 @@ export interface SymbolConfig {
   binanceSymbol?: string; // mã trên Binance (crypto)
   type: 'vnstock' | 'crypto';
   sector?: string;
+  floor?: string;      // HOSE | HNX | UPCOM
 }
 
 // Cổ phiếu Việt Nam (nguồn VNDirect - miễn phí, không cần key)

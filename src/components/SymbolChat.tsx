@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { SymbolConfig } from '@/lib/symbols';
+import { useUser } from '@/lib/useUser';
 
 interface ChatMessage {
   id: string;
@@ -19,6 +20,7 @@ interface SymbolChatProps {
 const NAME_KEY = 'market_sentiment_username';
 
 export default function SymbolChat({ symbol }: SymbolChatProps) {
+  const { user, signInWithGoogle } = useUser();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [userName, setUserName] = useState('');
   const [content, setContent] = useState('');
@@ -27,11 +29,14 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
   const listRef = useRef<HTMLDivElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Nhớ tên người dùng
+  // Nhớ tên người dùng (cho khách chưa đăng nhập)
   useEffect(() => {
     const saved = localStorage.getItem(NAME_KEY);
     if (saved) setUserName(saved);
   }, []);
+
+  // Tên thực tế gửi đi: ưu tiên tài khoản Google
+  const effectiveName = user?.name || userName;
 
   // Load chat + poll mỗi 3 giây khi đổi symbol
   useEffect(() => {
@@ -55,12 +60,12 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userName.trim() || !content.trim()) {
+    if (!effectiveName.trim() || !content.trim()) {
       alert('Nhập tên và nội dung nhé!');
       return;
     }
 
-    localStorage.setItem(NAME_KEY, userName.trim());
+    if (!user) localStorage.setItem(NAME_KEY, userName.trim());
     setSending(true);
     try {
       const res = await fetch('/api/chat', {
@@ -68,7 +73,7 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           symbol_id: symbol.id,
-          user_name: userName.trim(),
+          user_name: effectiveName.trim(),
           content: content.trim(),
           sentiment,
         }),
@@ -150,14 +155,30 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
 
       {/* Form gửi */}
       <form onSubmit={handleSend} className="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-3">
-        <input
-          type="text"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Tên của bạn"
-          maxLength={50}
-          className="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
-        />
+        {user ? (
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+            {user.avatar && <img src={user.avatar} alt="" className="w-5 h-5 rounded-full" />}
+            <span>Bình luận với tên <b>{user.name}</b></span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Tên của bạn (hoặc đăng nhập)"
+              maxLength={50}
+              className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-800 dark:text-white"
+            />
+            <button
+              type="button"
+              onClick={signInWithGoogle}
+              className="text-xs text-blue-600 dark:text-blue-400 underline whitespace-nowrap"
+            >
+              Đăng nhập Google
+            </button>
+          </div>
+        )}
         <div className="flex gap-2">
           <button
             type="button"

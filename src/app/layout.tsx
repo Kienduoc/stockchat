@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import UserMenu from "@/components/UserMenu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,14 +46,17 @@ export default function RootLayout({
                   <p className="text-blue-100 text-xs">Chart LIVE & thảo luận cổ phiếu Việt Nam + Crypto</p>
                 </div>
               </div>
-              <nav className="flex items-center gap-2">
-                <a href="/" className="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm font-semibold transition-colors">
-                  📊 Live Chart
-                </a>
-                <a href="/news" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
-                  📰 Tin tức
-                </a>
-              </nav>
+              <div className="flex items-center gap-3">
+                <nav className="hidden md:flex items-center gap-2">
+                  <a href="/" className="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm font-semibold transition-colors">
+                    📊 Live Chart
+                  </a>
+                  <a href="/news" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
+                    📰 Tin tức
+                  </a>
+                </nav>
+                <UserMenu />
+              </div>
             </div>
           </div>
         </header>
