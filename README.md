@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📊 Market Sentiment - Stock & Crypto News Feed
 
-## Getting Started
+A real-time sentiment tracker for stocks and cryptocurrency news. Vote long/short on market trends, comment on news, and discover what other traders think about the market!
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **📰 Live News Feed** - Latest news about stocks and crypto
+- **📈 Vote Long / 📉 Vote Short** - Express your market sentiment
+- **💬 Comments** - Discuss news with the community
+- **🎯 Sentiment Scoring** - Real-time % Bullish/Bearish
+- **🔄 Auto-Refresh** - Updates every 30 seconds (customizable)
+- **🎨 Sorting & Filtering** - Sort by: Newest, Trending, Bullish, Bearish
+- **🌓 Dark Mode** - Comfortable for all lighting conditions
+- **⚡ Fast & Responsive** - Built with Next.js
+
+## 🚀 Quick Start (3 Steps)
+
+### Step 1: Create Supabase Project (2 minutes)
+
+1. Go to https://supabase.com and sign up (free)
+2. Click "New Project"
+3. Fill in:
+   - **Project name**: `market-sentiment`
+   - **Password**: Create a strong password
+   - **Region**: Choose closest to you
+4. Click "Create new project" and wait 2-3 minutes
+5. When ready, go to **Settings → Database → Connection String**
+6. Copy the connection string
+
+### Step 2: Setup Database Schema
+
+1. In Supabase, go to **SQL Editor** (left sidebar)
+2. Click "New Query"
+3. Copy all content from `supabase-schema.sql` file
+4. Paste into the SQL Editor
+5. Click "Run" button
+6. Done! Tables created ✓
+
+### Step 3: Get Your API Keys
+
+1. In Supabase, go to **Settings → API**
+2. Copy these values:
+   - `NEXT_PUBLIC_SUPABASE_URL` (Project URL)
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Anon key)
+
+3. (Optional) Get free NewsAPI key from https://newsapi.org for real news
+
+## 📝 Setup Environment Variables
+
+1. Copy `.env.local.example` to `.env.local`
+2. Fill in your keys:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_project_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+NEXT_PUBLIC_NEWSAPI_KEY=optional_newsapi_key
+NEXT_PUBLIC_COINGECKO_API_URL=https://api.coingecko.com/api/v3
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🏃 Run Locally
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Install dependencies
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Run development server
+npm run dev
 
-## Learn More
+# Open http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🌐 Deploy to Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Push code to GitHub
+2. Go to https://vercel.com
+3. Click "New Project"
+4. Import your GitHub repo
+5. Set environment variables (your Supabase keys)
+6. Click "Deploy"
+7. Done! 🎉
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📱 How to Use
 
-## Deploy on Vercel
+### Voting
+1. See a news article
+2. Click **"📈 Vote Long"** (bullish) or **"📉 Vote Short"** (bearish)
+3. Enter your name
+4. View real-time sentiment %
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Comments
+1. Click **"💬 Show comments"**
+2. Type your name and comment
+3. Click "Post Comment"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Sorting
+- **🕐 Newest** - Latest first
+- **🔥 Trending** - Most voted
+- **📈 Most Bullish** - Highest long votes
+- **📉 Most Bearish** - Highest short votes
+
+## 🏗️ Tech Stack
+
+- **Frontend**: Next.js 16+, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: Supabase (PostgreSQL)
+- **Hosting**: Vercel (recommended)
+
+## 🐛 Troubleshooting
+
+**Can't connect to Supabase?**
+- Check your URL and keys in `.env.local`
+- Verify Supabase project is active
+
+**No news showing?**
+- App shows mock data by default
+- Add NewsAPI key for real news
+
+**Votes not saving?**
+- Check Supabase RLS policies are enabled
+- Run SQL schema successfully
+
+## 📄 License
+
+MIT - Free to use!
+
+---
+
+**Made with ❤️ using Next.js + Supabase**

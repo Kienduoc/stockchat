@@ -1,0 +1,94 @@
+=================================================================
+📊 MARKET SENTIMENT - STOCK & CRYPTO NEWS FEED
+=================================================================
+
+✅ APP READY TO USE!
+
+📁 Project Location: /Users/kien/CES/market-sentiment
+
+=================================================================
+🚀 NEXT STEPS (Choose One)
+=================================================================
+
+OPTION 1: Run Locally (Test First)
+────────────────────────────────────
+1. Go to: https://supabase.com
+2. Create free account
+3. Create new project (wait 2-3 min)
+4. Go to Settings → API
+5. Copy your keys:
+   - NEXT_PUBLIC_SUPABASE_URL
+   - NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+6. Open terminal, run:
+   cd /Users/kien/CES/market-sentiment
+   
+   cp .env.local.example .env.local
+   # Edit .env.local with your Supabase keys
+   
+   npm install
+   npm run dev
+
+7. Open browser: http://localhost:3000 ✨
+
+OPTION 2: Deploy to Vercel (Live)
+───────────────────────────────────
+See file: DEPLOY.md
+
+=================================================================
+📋 SETUP DATABASE
+=================================================================
+
+Before running, you MUST setup database:
+
+1. In Supabase dashboard
+2. Go to: SQL Editor
+3. Click: New Query
+4. Open file: supabase-schema.sql
+5. Copy ALL content
+6. Paste into SQL Editor
+7. Click: Run button
+
+Done! ✓
+
+=================================================================
+📚 FULL GUIDES
+=================================================================
+
+- GETTING_STARTED.md .... Quick 5-min setup
+- SUPABASE_SETUP.md .... Detailed Supabase guide
+- DEPLOY.md ............ How to deploy live
+- README.md ............ Full documentation
+
+=================================================================
+💡 WHAT YOU CAN DO NOW
+=================================================================
+
+✓ Vote Long/Short on news
+✓ Comment on articles
+✓ See real-time sentiment
+✓ Sort by trending/bullish/bearish
+✓ Filter stocks vs crypto
+
+=================================================================
+🎨 UPDATE WITH AI
+=================================================================
+
+Just tell Claude:
+- "Add feature X"
+- "Fix bug Y"
+- "Change color Z"
+- "Add more stocks"
+
+AI will handle everything! 🤖
+
+=================================================================
+✅ YOU'RE ALL SET!
+=================================================================
+
+Ready? Start with:
+  cd /Users/kien/CES/market-sentiment
+  npm install
+  npm run dev
+
+Go to http://localhost:3000 and enjoy! 🚀
