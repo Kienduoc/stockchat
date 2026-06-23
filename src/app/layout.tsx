@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -13,10 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Market Sentiment - Stock & Crypto News Feed",
-  description: "Real-time market sentiment tracker for stocks and crypto. Vote long/short and share insights with the community.",
-  keywords: ["stocks", "crypto", "bitcoin", "trading", "market sentiment", "news"],
-  viewport: "width=device-width, initial-scale=1",
+  title: "StockChat VN - Chart LIVE cổ phiếu Việt Nam & Crypto",
+  description: "Xem biểu đồ giá LIVE cổ phiếu Việt Nam (HOSE/HNX) và crypto, thảo luận long/short real-time với cộng đồng.",
+  keywords: ["chứng khoán", "cổ phiếu việt nam", "crypto", "bitcoin", "HOSE", "VNIndex", "chart live"],
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -37,13 +41,18 @@ export default function RootLayout({
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📊</span>
                 <div>
-                  <h1 className="text-2xl font-bold text-white">Market Sentiment</h1>
-                  <p className="text-blue-100 text-xs">Stock & Crypto News Feed</p>
+                  <h1 className="text-2xl font-bold text-white">StockChat VN</h1>
+                  <p className="text-blue-100 text-xs">Chart LIVE & thảo luận cổ phiếu Việt Nam + Crypto</p>
                 </div>
               </div>
-              <div className="text-blue-100 text-sm">
-                Vote • Comment • Discover Trends 🚀
-              </div>
+              <nav className="flex items-center gap-2">
+                <a href="/" className="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm font-semibold transition-colors">
+                  📊 Live Chart
+                </a>
+                <a href="/news" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
+                  📰 Tin tức
+                </a>
+              </nav>
             </div>
           </div>
         </header>

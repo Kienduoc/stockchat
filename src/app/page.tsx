@@ -1,7 +1,7 @@
 'use client';
 
-import NewsFeed from '@/components/NewsFeed';
+import LiveDashboard from '@/components/LiveDashboard';
 
 export default function Home() {
-  return <NewsFeed />;
+  return <LiveDashboard />;
 }
