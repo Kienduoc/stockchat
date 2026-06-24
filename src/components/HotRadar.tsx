@@ -39,6 +39,16 @@ function timeAgo(iso: string): string {
   return `${Math.floor(h / 24)}d`;
 }
 
+// Thời gian chính xác: 14:23:05 12/06/2026
+function fmtExact(iso: string): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleString('vi-VN', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+  });
+}
+
 function Avatar({ name, avatar }: { name: string; avatar: string | null }) {
   if (avatar) return <img src={avatar} alt={name} className="w-9 h-9 rounded-full" />;
   return (
@@ -227,7 +237,7 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 text-sm">
                       <span className="font-semibold text-gray-800 dark:text-white">{p.author_name}</span>
-                      <span className="text-gray-400 text-xs">• {timeAgo(p.created_at)}</span>
+                      <span className="text-gray-400 text-xs" title={fmtExact(p.created_at)}>• {timeAgo(p.created_at)} · {fmtExact(p.created_at)}</span>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-200 mt-1 whitespace-pre-wrap break-words">{p.content}</p>
 
@@ -278,12 +288,16 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
 function Discussion({ postId, myName, avatar, onChange }: { postId: string; myName: string; avatar: string | null; onChange: () => void }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [text, setText] = useState('');
+  const [sending, setSending] = useState(false);
 
   const load = async () => {
     try {
       const res = await fetch(`/api/post-comments?post_id=${postId}`);
       const d = await res.json();
-      setComments(d.data || []);
+      // Khử trùng lặp theo id phòng trường hợp dữ liệu cũ bị lặp
+      const seen = new Set<string>();
+      const unique = (d.data || []).filter((c: Comment) => (seen.has(c.id) ? false : seen.add(c.id)));
+      setComments(unique);
     } catch {}
   };
   useEffect(() => {
@@ -291,16 +305,22 @@ function Discussion({ postId, myName, avatar, onChange }: { postId: string; myNa
   }, [postId]);
 
   const send = async () => {
+    if (sending) return; // chống gửi 2 lần
     if (!myName) return alert('Nhập tên/đăng nhập để thảo luận.');
     if (!text.trim()) return;
-    await fetch('/api/post-comments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ post_id: postId, user_name: myName, author_avatar: avatar, content: text.trim() }),
-    }).catch(() => {});
-    setText('');
-    load();
-    onChange();
+    setSending(true);
+    try {
+      await fetch('/api/post-comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ post_id: postId, user_name: myName, author_avatar: avatar, content: text.trim() }),
+      });
+      setText('');
+      await load();
+      onChange();
+    } catch {} finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -309,7 +329,12 @@ function Discussion({ postId, myName, avatar, onChange }: { postId: string; myNa
         <div key={c.id} className="flex gap-2 text-sm">
           <Avatar name={c.user_name} avatar={c.author_avatar} />
           <div className="bg-gray-50 dark:bg-gray-900 rounded-lg px-3 py-1.5 flex-1">
-            <span className="font-semibold text-gray-800 dark:text-white text-xs">{c.user_name}</span>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-gray-800 dark:text-white text-xs">{c.user_name}</span>
+              <span className="text-[10px] text-gray-400 ml-auto" title={fmtExact(c.created_at)}>
+                {fmtExact(c.created_at)}
+              </span>
+            </div>
             <p className="text-gray-700 dark:text-gray-300 text-sm">{c.content}</p>
           </div>
         </div>
@@ -318,13 +343,14 @@ function Discussion({ postId, myName, avatar, onChange }: { postId: string; myNa
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && send()}
+          onKeyDown={(e) => e.key === 'Enter' && !sending && send()}
           placeholder="Thảo luận..."
           maxLength={500}
-          className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+          disabled={sending}
+          className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-800 dark:text-white disabled:opacity-60"
         />
-        <button onClick={send} className="bg-emerald-500 hover:bg-emerald-400 text-white px-3 py-1.5 rounded text-sm font-semibold">
-          Gửi
+        <button onClick={send} disabled={sending} className="bg-emerald-500 hover:bg-emerald-400 text-white px-3 py-1.5 rounded text-sm font-semibold disabled:opacity-50">
+          {sending ? '...' : 'Gửi'}
         </button>
       </div>
     </div>
