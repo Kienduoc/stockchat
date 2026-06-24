@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { VN_SYMBOLS, CRYPTO_SYMBOLS, SymbolConfig } from '@/lib/symbols';
+import { useState, useEffect } from 'react';
+import { VN_SYMBOLS, CRYPTO_SYMBOLS, SymbolConfig, buildSymbolFromId } from '@/lib/symbols';
 import PriceChart from './PriceChart';
 import SymbolChat from './SymbolChat';
 import SymbolSearch from './SymbolSearch';
@@ -13,6 +13,18 @@ import RealtimeFlow from './RealtimeFlow';
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
   const [tab, setTab] = useState<'vn' | 'crypto'>('vn');
+  const [price, setPrice] = useState<number | null>(null);
+
+  // Mở đúng mã khi vào từ Radar/Bảng xếp hạng (?symbol=vn:HPG)
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('symbol');
+    if (!id) return;
+    const s = buildSymbolFromId(id);
+    if (s) {
+      setSelected(s);
+      setTab(s.type === 'crypto' ? 'crypto' : 'vn');
+    }
+  }, []);
 
   const list = tab === 'vn' ? VN_SYMBOLS : CRYPTO_SYMBOLS;
 
@@ -71,7 +83,7 @@ export default function LiveDashboard() {
       {/* Chart + Chat */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 space-y-4">
-          <PriceChart symbol={selected} />
+          <PriceChart symbol={selected} onPrice={setPrice} />
           <NewsPanel symbol={selected} />
         </div>
         <div className="lg:col-span-1">
@@ -79,7 +91,7 @@ export default function LiveDashboard() {
             <RealtimeFlow symbol={selected} />
             <MarketLongShort symbol={selected} />
             <SentimentGauge symbol={selected} />
-            <SymbolChat symbol={selected} />
+            <SymbolChat symbol={selected} currentPrice={price} />
           </div>
         </div>
       </div>

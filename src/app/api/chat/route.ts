@@ -33,26 +33,32 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { symbol_id, user_name, content, sentiment } = body;
+    const { symbol_id, user_name, content, sentiment, price_at_vote } = body;
 
     if (!symbol_id || !user_name || !content) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-      .from('chat_messages')
-      .insert([
-        {
-          symbol_id,
-          user_name: user_name.substring(0, 50),
-          content: content.substring(0, 500),
-          sentiment: sentiment === 'long' || sentiment === 'short' ? sentiment : null,
-        },
-      ])
-      .select();
+    const isVote = sentiment === 'long' || sentiment === 'short';
+    const base = {
+      symbol_id,
+      user_name: user_name.substring(0, 50),
+      content: content.substring(0, 500),
+      sentiment: isVote ? sentiment : null,
+    };
+    const withPrice = {
+      ...base,
+      price_at_vote: isVote && typeof price_at_vote === 'number' ? price_at_vote : null,
+    };
+
+    // Thử lưu kèm giá; nếu cột chưa tồn tại thì lưu không kèm giá (chat vẫn chạy)
+    let { data, error } = await supabase.from('chat_messages').insert([withPrice]).select();
+    if (error && /price_at_vote/.test(error.message || '')) {
+      ({ data, error } = await supabase.from('chat_messages').insert([base]).select());
+    }
 
     if (error) throw error;
-    return NextResponse.json(data[0], { status: 201 });
+    return NextResponse.json(data?.[0] ?? {}, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to post' }, { status: 400 });
   }

@@ -16,7 +16,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-3">
               <nav className="hidden md:flex items-center gap-2">
                 <a href="/" className="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm font-semibold transition-colors">
-                  📊 Live Chart
+                  📊 Chart
+                </a>
+                <a href="/hot" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
+                  🔥 Tin Nóng
+                </a>
+                <a href="/leaderboard" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
+                  🏆 Cao thủ
                 </a>
                 <a href="/news" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
                   📰 Tin tức

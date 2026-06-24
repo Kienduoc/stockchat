@@ -45,6 +45,28 @@ export function getSymbolById(id: string): SymbolConfig | undefined {
   return ALL_SYMBOLS.find((s) => s.id === id);
 }
 
+// Tạo SymbolConfig từ symbol_id bất kỳ (vd "vn:HPG", "crypto:BTCUSDT")
+export function buildSymbolFromId(id: string): SymbolConfig | null {
+  const known = getSymbolById(id);
+  if (known) return known;
+  const [market, code] = id.split(':');
+  if (!code) return null;
+  if (market === 'vn') {
+    return { id, ticker: code, label: code, vndSymbol: code, type: 'vnstock' };
+  }
+  if (market === 'crypto') {
+    return { id, ticker: code.replace('USDT', ''), label: `${code.replace('USDT', '')}/USDT`, binanceSymbol: code, type: 'crypto' };
+  }
+  return null;
+}
+
+// Lấy ticker hiển thị từ symbol_id
+export function tickerFromId(id: string): string {
+  const [market, code] = id.split(':');
+  if (!code) return id;
+  return market === 'crypto' ? code.replace('USDT', '') : code;
+}
+
 // Map khung thời gian sang resolution của VNDirect
 export const VN_RESOLUTION: Record<string, string> = {
   '1m': '1',

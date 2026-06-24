@@ -15,11 +15,12 @@ interface ChatMessage {
 
 interface SymbolChatProps {
   symbol: SymbolConfig;
+  currentPrice?: number | null;
 }
 
 const NAME_KEY = 'market_sentiment_username';
 
-export default function SymbolChat({ symbol }: SymbolChatProps) {
+export default function SymbolChat({ symbol, currentPrice }: SymbolChatProps) {
   const { user, signInWithGoogle } = useUser();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [userName, setUserName] = useState('');
@@ -87,6 +88,7 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
           user_name: effectiveName.trim(),
           content: content.trim(),
           sentiment,
+          price_at_vote: sentiment ? currentPrice ?? null : null,
         }),
       });
       if (res.ok) {

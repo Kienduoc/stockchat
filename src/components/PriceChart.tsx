@@ -14,6 +14,7 @@ import { SymbolConfig, VN_RESOLUTION } from '@/lib/symbols';
 
 interface PriceChartProps {
   symbol: SymbolConfig;
+  onPrice?: (price: number) => void;
 }
 
 const CRYPTO_INTERVALS = [
@@ -33,7 +34,7 @@ const VN_INTERVALS = [
   { value: '1d', label: '1 ngày' },
 ];
 
-export default function PriceChart({ symbol }: PriceChartProps) {
+export default function PriceChart({ symbol, onPrice }: PriceChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
@@ -53,6 +54,11 @@ export default function PriceChart({ symbol }: PriceChartProps) {
   useEffect(() => {
     setIntervalValue(isVN ? '1d' : '1m');
   }, [isVN]);
+
+  // Báo giá hiện tại lên component cha (để lưu giá lúc vote)
+  useEffect(() => {
+    if (price !== null && onPrice) onPrice(price);
+  }, [price, onPrice]);
 
   // Khởi tạo chart 1 lần
   useEffect(() => {
