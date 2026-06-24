@@ -104,12 +104,6 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
     }
   };
 
-  // Đếm sentiment
-  const longCount = messages.filter((m) => m.sentiment === 'long').length;
-  const shortCount = messages.filter((m) => m.sentiment === 'short').length;
-  const total = longCount + shortCount;
-  const longPct = total ? Math.round((longCount / total) * 100) : 50;
-
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 flex flex-col h-[500px]">
       <div className="flex items-center justify-between mb-3">
@@ -118,20 +112,6 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
         </h3>
         <span className="text-xs text-gray-400">{messages.length} tin nhắn • LIVE</span>
       </div>
-
-      {/* Thanh sentiment cộng đồng */}
-      {total > 0 && (
-        <div className="mb-3">
-          <div className="flex justify-between text-xs mb-1">
-            <span className="text-green-500 font-semibold">📈 Long {longCount}</span>
-            <span className="text-red-500 font-semibold">Short {shortCount} 📉</span>
-          </div>
-          <div className="flex h-2 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-            <div className="bg-green-500" style={{ width: `${longPct}%` }} />
-            <div className="bg-red-500" style={{ width: `${100 - longPct}%` }} />
-          </div>
-        </div>
-      )}
 
       {/* Danh sách tin nhắn */}
       <div ref={listRef} className="flex-1 overflow-y-auto space-y-2 mb-3 pr-1">
