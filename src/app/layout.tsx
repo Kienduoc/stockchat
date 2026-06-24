@@ -1,16 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Sora } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin", "vietnamese"],
-});
-
-const sora = Sora({
-  variable: "--font-sora",
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +26,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`dark ${inter.variable} ${sora.variable} h-full antialiased`}
+      className={`dark ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full text-slate-200">
         {children}
