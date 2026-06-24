@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import LiveTicker from '@/components/LiveTicker';
+import { supabase } from '@/lib/supabase';
 
 const features = [
   { icon: '📈', title: 'Chart LIVE đầy đủ khung', desc: 'Biểu đồ nến real-time 1m → 1d cho 1.528 cổ phiếu VN và 437 cặp crypto.' },
@@ -16,6 +18,17 @@ const security = [
 ];
 
 export default function LandingPage() {
+  // Lưới an toàn: nếu OAuth trả token về "/" (do Redirect URL chưa khớp),
+  // khởi tạo Supabase để xử lý token rồi đưa vào /app.
+  useEffect(() => {
+    const hasToken =
+      window.location.hash.includes('access_token') || window.location.search.includes('code=');
+    if (!hasToken) return;
+    supabase.auth.getSession().finally(() => {
+      window.location.replace('/app');
+    });
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Background blobs */}

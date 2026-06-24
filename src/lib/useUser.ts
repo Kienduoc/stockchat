@@ -39,9 +39,13 @@ export function useUser() {
   }, []);
 
   const signInWithGoogle = async () => {
+    // Quay lại đúng trang đang đứng (mặc định /app) để Supabase xử lý token + giữ phiên.
+    // KHÔNG về "/" (landing) vì trang đó không khởi tạo Supabase -> mất phiên.
+    const path = window.location.pathname;
+    const back = path === '/' || path === '' ? '/app' : path + window.location.search;
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: window.location.origin + back },
     });
   };
 
