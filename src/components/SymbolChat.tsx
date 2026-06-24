@@ -51,12 +51,23 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
     };
 
     load();
-    pollRef.current = setInterval(load, 3000);
+    pollRef.current = setInterval(load, 2000);
 
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
     };
   }, [symbol.id]);
+
+  // Tự cuộn xuống dưới khi có tin nhắn mới (chat nhảy liên tục)
+  const prevCount = useRef(0);
+  useEffect(() => {
+    if (messages.length !== prevCount.current) {
+      prevCount.current = messages.length;
+      if (listRef.current) {
+        listRef.current.scrollTop = listRef.current.scrollHeight;
+      }
+    }
+  }, [messages]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +140,7 @@ export default function SymbolChat({ symbol }: SymbolChatProps) {
             Chưa có bình luận. Hãy là người đầu tiên! 👋
           </p>
         ) : (
-          messages.map((m) => (
+          [...messages].reverse().map((m) => (
             <div key={m.id} className="bg-gray-50 dark:bg-gray-900 rounded p-2 text-sm">
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-semibold text-gray-800 dark:text-white">{m.user_name}</span>

@@ -6,6 +6,7 @@ import PriceChart from './PriceChart';
 import SymbolChat from './SymbolChat';
 import SymbolSearch from './SymbolSearch';
 import SentimentChart from './SentimentChart';
+import NewsPanel from './NewsPanel';
 
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
@@ -70,9 +71,12 @@ export default function LiveDashboard() {
         <div className="lg:col-span-2 space-y-4">
           <PriceChart symbol={selected} />
           <SentimentChart symbol={selected} />
+          <NewsPanel symbol={selected} />
         </div>
         <div className="lg:col-span-1">
-          <SymbolChat symbol={selected} />
+          <div className="lg:sticky lg:top-4">
+            <SymbolChat symbol={selected} />
+          </div>
         </div>
       </div>
     </div>
