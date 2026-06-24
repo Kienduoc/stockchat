@@ -1,4 +1,5 @@
 import UserMenu from "@/components/UserMenu";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -28,6 +29,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   📰 Tin tức
                 </a>
               </nav>
+              <NotificationBell />
               <UserMenu />
             </div>
           </div>

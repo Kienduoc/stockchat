@@ -10,6 +10,7 @@ import SentimentGauge from './SentimentGauge';
 import MarketLongShort from './MarketLongShort';
 import RealtimeFlow from './RealtimeFlow';
 import HotRadar from './HotRadar';
+import WatchButton from './WatchButton';
 
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
@@ -79,6 +80,15 @@ export default function LiveDashboard() {
           </button>
         ))}
         </div>
+      </div>
+
+      {/* Mã đang xem + theo dõi */}
+      <div className="flex items-center justify-between gap-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 px-4 py-2">
+        <span className="text-sm text-gray-600 dark:text-gray-300">
+          Đang xem: <b className="text-gray-800 dark:text-white">{selected.ticker}</b>
+          <span className="text-gray-400"> — {selected.label}</span>
+        </span>
+        <WatchButton symbol={selected} />
       </div>
 
       {/* Chart + Chat */}
