@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "/api/cron/warm-news",
-      "schedule": "*/30 * * * *"
+      "schedule": "*/15 * * * *"
     }
   ]
 }

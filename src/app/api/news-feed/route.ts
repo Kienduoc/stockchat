@@ -9,7 +9,7 @@ interface Article {
 }
 
 const cache = new Map<string, { data: Article[]; ts: number }>();
-const TTL = 30 * 60 * 1000; // 30 phút
+const TTL = 15 * 60 * 1000; // 15 phút
 
 function decodeEntities(s: string): string {
   return s
