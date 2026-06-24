@@ -23,7 +23,7 @@ export default function SentimentGauge({ symbol }: SentimentGaugeProps) {
       } catch {}
     };
     load();
-    const iv = setInterval(load, 3000);
+    const iv = setInterval(load, 1000);
     return () => {
       cancelled = true;
       clearInterval(iv);
