@@ -58,7 +58,7 @@ export default function SentimentGauge({ symbol }: SentimentGaugeProps) {
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="font-bold text-gray-800 dark:text-white text-sm">
-          🎯 Tâm lý thị trường — {symbol.ticker}
+          🎯 Tâm lý cộng đồng — {symbol.ticker}
         </h3>
         <span className="text-xs text-gray-400">{total} lượt vote</span>
       </div>

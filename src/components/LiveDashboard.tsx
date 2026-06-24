@@ -8,6 +8,7 @@ import SymbolSearch from './SymbolSearch';
 import SentimentChart from './SentimentChart';
 import NewsPanel from './NewsPanel';
 import SentimentGauge from './SentimentGauge';
+import MarketLongShort from './MarketLongShort';
 
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
@@ -76,6 +77,7 @@ export default function LiveDashboard() {
         </div>
         <div className="lg:col-span-1">
           <div className="lg:sticky lg:top-4 space-y-4">
+            <MarketLongShort symbol={selected} />
             <SentimentGauge symbol={selected} />
             <SymbolChat symbol={selected} />
           </div>
