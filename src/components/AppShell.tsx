@@ -1,5 +1,6 @@
 import UserMenu from "@/components/UserMenu";
 import NotificationBell from "@/components/NotificationBell";
+import LoginGate from "@/components/LoginGate";
 
 const NAV = [
   { href: "/app", label: "Chart", icon: "📊" },
@@ -58,7 +59,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <main className="flex-1">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">{children}</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <LoginGate>{children}</LoginGate>
+        </div>
       </main>
 
       <footer className="border-t border-white/10 mt-12">
