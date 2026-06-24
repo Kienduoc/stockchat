@@ -55,7 +55,7 @@ export default function SentimentGauge({ symbol }: SentimentGaugeProps) {
     total === 0 ? 'text-gray-400' : longPct >= 60 ? 'text-green-500' : longPct <= 40 ? 'text-red-500' : 'text-amber-500';
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
+    <div className="card p-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="font-bold text-gray-800 dark:text-white text-sm">
           🎯 Tâm lý cộng đồng — {symbol.ticker}

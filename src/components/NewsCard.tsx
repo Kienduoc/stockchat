@@ -15,7 +15,7 @@ export default function NewsCard({ news, onVote }: NewsCardProps) {
   const [showComments, setShowComments] = useState(false);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-4 border border-gray-200 dark:border-gray-700">
+    <div className="card p-6 mb-4">
       {/* Header */}
       <div className="flex gap-4 mb-4">
         {news.image && (

@@ -79,7 +79,7 @@ export default function MarketLongShort({ symbol }: MarketLongShortProps) {
   }, [symbol.id, isCrypto, symbol.binanceSymbol]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
+    <div className="card p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-bold text-gray-800 dark:text-white text-sm">
           🌐 Long/Short thị trường thật

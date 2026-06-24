@@ -217,7 +217,7 @@ export default function PriceChart({ symbol, onPrice }: PriceChartProps) {
         : `$${price.toLocaleString(undefined, { maximumFractionDigits: price < 1 ? 6 : 2 })}`;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
+    <div className="card p-4">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div>
           <h2 className="text-xl font-bold text-gray-800 dark:text-white">
@@ -244,7 +244,7 @@ export default function PriceChart({ symbol, onPrice }: PriceChartProps) {
             onClick={() => setIntervalValue(iv.value)}
             className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
               interval === iv.value
-                ? 'bg-blue-600 text-white'
+                ? 'bg-emerald-500 text-white'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >

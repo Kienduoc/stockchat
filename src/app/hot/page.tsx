@@ -86,7 +86,7 @@ export default function HotPage() {
         </button>
         <button
           onClick={() => setTab('symbols')}
-          className={`px-4 py-2 rounded-lg font-semibold text-sm ${tab === 'symbols' ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'}`}
+          className={`px-4 py-2 rounded-lg font-semibold text-sm ${tab === 'symbols' ? 'bg-emerald-500 text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'}`}
         >
           📊 Mã sôi động
         </button>

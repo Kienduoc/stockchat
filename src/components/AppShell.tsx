@@ -1,49 +1,70 @@
 import UserMenu from "@/components/UserMenu";
 import NotificationBell from "@/components/NotificationBell";
 
+const NAV = [
+  { href: "/", label: "Chart", icon: "📊" },
+  { href: "/hot", label: "Tin Nóng", icon: "🔥" },
+  { href: "/leaderboard", label: "Cao thủ", icon: "🏆" },
+  { href: "/news", label: "Tin tức", icon: "📰" },
+];
+
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <header className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 shadow-lg sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <a href="/landing" className="flex items-center gap-3">
-              <span className="text-2xl">📊</span>
-              <div>
-                <h1 className="text-2xl font-bold text-white">StockChat VN</h1>
-                <p className="text-blue-100 text-xs">Chart LIVE & thảo luận cổ phiếu Việt Nam + Crypto</p>
-              </div>
+      <header className="sticky top-0 z-50 glass border-x-0 border-t-0">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <a href="/landing" className="flex items-center gap-2 shrink-0">
+              <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-lg shadow-lg shadow-emerald-500/30">📈</span>
+              <span className="font-display text-xl font-extrabold text-white hidden sm:block">
+                StockChat <span className="text-emerald-400">VN</span>
+              </span>
             </a>
-            <div className="flex items-center gap-3">
-              <nav className="hidden md:flex items-center gap-2">
-                <a href="/" className="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm font-semibold transition-colors">
-                  📊 Chart
+
+            {/* Nav desktop */}
+            <nav className="hidden md:flex items-center gap-1">
+              {NAV.map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  className="px-3 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+                >
+                  {n.icon} {n.label}
                 </a>
-                <a href="/hot" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
-                  🔥 Tin Nóng
-                </a>
-                <a href="/leaderboard" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
-                  🏆 Cao thủ
-                </a>
-                <a href="/news" className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors">
-                  📰 Tin tức
-                </a>
-              </nav>
+              ))}
+            </nav>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2 sm:gap-3">
               <NotificationBell />
               <UserMenu />
             </div>
           </div>
         </div>
+
+        {/* Nav mobile (cuộn ngang) */}
+        <nav className="md:hidden flex items-center gap-1 px-3 pb-2 overflow-x-auto">
+          {NAV.map((n) => (
+            <a
+              key={n.href}
+              href={n.href}
+              className="shrink-0 px-3 py-1.5 rounded-lg text-sm font-semibold text-slate-300 bg-white/5 whitespace-nowrap"
+            >
+              {n.icon} {n.label}
+            </a>
+          ))}
+        </nav>
       </header>
 
       <main className="flex-1">
-        <div className="max-w-6xl mx-auto px-4 py-8">{children}</div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">{children}</div>
       </main>
 
-      <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-12">
-        <div className="max-w-6xl mx-auto px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
+      <footer className="border-t border-white/10 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 text-center text-sm text-slate-500">
           <p>StockChat VN © 2026 • Cộng đồng chia sẻ thông tin thị trường</p>
-          <p className="mt-2 text-xs">Dữ liệu cập nhật real-time • Cổ phiếu VN (VNDirect) & Crypto (Binance)</p>
+          <p className="mt-1 text-xs">Dữ liệu real-time từ VNDirect & Binance • Không phải lời khuyên đầu tư</p>
         </div>
       </footer>
     </>

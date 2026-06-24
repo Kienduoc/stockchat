@@ -107,7 +107,7 @@ export default function SymbolChat({ symbol, currentPrice }: SymbolChatProps) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4 flex flex-col h-[500px]">
+    <div className="card p-4 flex flex-col h-[500px]">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-bold text-gray-800 dark:text-white">
           💬 Thảo luận {symbol.ticker}
@@ -208,7 +208,7 @@ export default function SymbolChat({ symbol, currentPrice }: SymbolChatProps) {
           <button
             type="submit"
             disabled={sending}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-1.5 rounded text-sm disabled:opacity-50"
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-4 py-1.5 rounded text-sm disabled:opacity-50"
           >
             {sending ? '...' : 'Gửi'}
           </button>

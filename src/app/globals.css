@@ -1,31 +1,56 @@
 @import "tailwindcss";
 
+/* Ép dark mode bằng class .dark (gắn trên <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #070b14;
+  --surface: #0e1626;
+  --border: rgba(148, 163, 184, 0.12);
+  --primary: #22c55e;
+  --accent: #38bdf8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-sora);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: #e2e8f0;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 600px at 85% -5%, rgba(34, 197, 94, 0.10), transparent 60%),
+    radial-gradient(800px 500px at 0% 0%, rgba(56, 189, 248, 0.10), transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
 }
 
-/* ===== Landing page animations (glassmorphism fintech) ===== */
+h1, h2, h3, .font-display {
+  font-family: var(--font-sora), var(--font-inter), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* ===== Thẻ kính fintech (dùng chung) ===== */
+.card {
+  background: rgba(14, 22, 38, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.card:hover {
+  border-color: rgba(34, 197, 94, 0.28);
+}
+
+/* ===== Landing / hiệu ứng ===== */
 @keyframes blob {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(40px, -60px) scale(1.1); }
@@ -41,8 +66,16 @@ body {
 }
 .animate-blob { animation: blob 14s ease-in-out infinite; }
 .animate-float-up { animation: floatUp 0.7s ease-out both; }
+
+/* Chữ gradient nhấn (xanh dương -> cyan -> xanh lá) */
+.text-gradient {
+  background: linear-gradient(95deg, #38bdf8, #22d3ee, #22c55e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .text-shimmer {
-  background: linear-gradient(90deg, #F59E0B, #FBBF24, #8B5CF6, #F59E0B);
+  background: linear-gradient(90deg, #38bdf8, #22d3ee, #22c55e, #38bdf8);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -56,5 +89,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .glass:hover {
-  border-color: rgba(245, 158, 11, 0.4);
+  border-color: rgba(34, 197, 94, 0.4);
 }
+
+/* Thanh cuộn mảnh */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 8px; }
+::-webkit-scrollbar-track { background: transparent; }

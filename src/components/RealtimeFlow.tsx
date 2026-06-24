@@ -76,7 +76,7 @@ export default function RealtimeFlow({ symbol }: RealtimeFlowProps) {
   const domColor = buyPct > 55 ? 'text-green-500' : sellPct > 55 ? 'text-red-500' : 'text-amber-500';
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
+    <div className="card p-4">
       <div className="flex items-center justify-between mb-2">
         <h3 className="font-bold text-gray-800 dark:text-white text-sm">⚡ Áp lực Mua/Bán LIVE</h3>
         <span className="flex items-center gap-1 text-xs">

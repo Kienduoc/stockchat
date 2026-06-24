@@ -88,7 +88,7 @@ export default function CommentSection({ newsId }: CommentSectionProps) {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors disabled:opacity-50"
+          className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded transition-colors disabled:opacity-50"
         >
           {submitting ? 'Posting...' : 'Post Comment'}
         </button>

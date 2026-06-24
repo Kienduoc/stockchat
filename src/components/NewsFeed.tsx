@@ -51,7 +51,7 @@ export default function NewsFeed() {
   return (
     <div className="space-y-6">
       {/* Controls */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 sticky top-0 z-10">
+      <div className="card p-6 sticky top-0 z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Sort By */}
           <div>
@@ -107,7 +107,7 @@ export default function NewsFeed() {
           <div className="flex items-end">
             <button
               onClick={loadNews}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors"
+              className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded transition-colors"
             >
               🔄 Refresh Now
             </button>

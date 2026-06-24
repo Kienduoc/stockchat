@@ -134,7 +134,7 @@ export default function NewsPanel({ symbol }: NewsPanelProps) {
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
+    <div className="card p-4">
       <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
         <h3 className="font-bold text-gray-800 dark:text-white">📰 Tin tức — {symbol.ticker}</h3>
         <span className="text-xs text-gray-400">Cập nhật 15 phút/lần</span>
@@ -148,7 +148,7 @@ export default function NewsPanel({ symbol }: NewsPanelProps) {
             onClick={() => setSort(t.key)}
             className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
               sort === t.key
-                ? 'bg-blue-600 text-white'
+                ? 'bg-emerald-500 text-white'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >

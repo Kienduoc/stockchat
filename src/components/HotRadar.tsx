@@ -156,7 +156,7 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
   ];
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-4">
+    <div className="card p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="font-bold text-gray-800 dark:text-white flex items-center gap-1">
           🔥 Radar Tin Nóng — {symbol.ticker}
@@ -202,7 +202,7 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
             key={t.k}
             onClick={() => setSort(t.k)}
             className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-              sort === t.k ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              sort === t.k ? 'bg-emerald-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
             }`}
           >
             {t.label}
@@ -323,7 +323,7 @@ function Discussion({ postId, myName, avatar, onChange }: { postId: string; myNa
           maxLength={500}
           className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
         />
-        <button onClick={send} className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-semibold">
+        <button onClick={send} className="bg-emerald-500 hover:bg-emerald-400 text-white px-3 py-1.5 rounded text-sm font-semibold">
           Gửi
         </button>
       </div>
