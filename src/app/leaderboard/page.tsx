@@ -2,15 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import AppShell from '@/components/AppShell';
+import { getLevel, levelProgress } from '@/lib/levels';
 
 interface Row {
-  user_name: string;
-  total: number;
-  wins: number;
-  winRate: number;
-  avgReturn: number;
-  long: number;
-  short: number;
+  name: string;
+  avatar: string | null;
+  posts: number;
+  points: number;
+  trueVotes: number;
+  falseVotes: number;
+  accuracy: number;
+  level: string;
+  levelIcon: string;
+  levelColor: string;
 }
 
 export default function LeaderboardPage() {
@@ -27,7 +31,7 @@ export default function LeaderboardPage() {
       setLoading(false);
     };
     load();
-    const iv = setInterval(load, 30000);
+    const iv = setInterval(load, 15000);
     return () => clearInterval(iv);
   }, []);
 
@@ -36,12 +40,20 @@ export default function LeaderboardPage() {
   return (
     <AppShell>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-          🏆 Bảng xếp hạng Cao thủ
-        </h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">🏆 Bảng xếp hạng Cao thủ</h1>
         <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-          Xếp theo tỷ lệ thắng — vote Long/Short được chấm theo giá thực tế. Tối thiểu 3 kèo. Cập nhật mỗi 30 giây.
+          Đăng tin nóng → cộng đồng vote Đúng/Sai. Mỗi lượt <b>Đúng</b> +1 điểm, <b>Sai</b> −1 điểm → thăng cấp.
         </p>
+        <div className="flex flex-wrap gap-2 mt-3 text-xs">
+          {[0, 10, 50, 150, 500].map((p) => {
+            const lv = getLevel(p);
+            return (
+              <span key={p} className="px-2 py-1 rounded-full" style={{ backgroundColor: lv.color + '22', color: lv.color }}>
+                {lv.icon} {lv.name} ({p}+)
+              </span>
+            );
+          })}
+        </div>
       </div>
 
       {loading ? (
@@ -49,45 +61,55 @@ export default function LeaderboardPage() {
       ) : rows.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-12 text-center">
           <p className="text-gray-500 dark:text-gray-400">
-            Chưa đủ dữ liệu. Hãy vào các mã, bấm 📈 Long / 📉 Short khi bình luận để được chấm điểm!
-          </p>
-          <p className="text-gray-400 text-xs mt-2">
-            (Cần ≥3 lượt vote có kèm giá để lên bảng)
+            Chưa có ai đăng tin. Vào một mã, đăng tin ở <b>🔥 Radar Tin Nóng</b> để bắt đầu kiếm điểm!
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="grid grid-cols-12 gap-2 px-4 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-            <div className="col-span-1">#</div>
-            <div className="col-span-4">Cao thủ</div>
-            <div className="col-span-2 text-center">Tỷ lệ thắng</div>
-            <div className="col-span-2 text-center">Số kèo</div>
-            <div className="col-span-3 text-right">LN TB/kèo</div>
-          </div>
-          {rows.map((r, i) => (
-            <div
-              key={r.user_name}
-              className={`grid grid-cols-12 gap-2 px-4 py-3 items-center border-b border-gray-100 dark:border-gray-700/50 ${
-                i < 3 ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''
-              }`}
-            >
-              <div className="col-span-1 font-bold text-gray-600 dark:text-gray-300">{medal(i)}</div>
-              <div className="col-span-4 font-semibold text-gray-800 dark:text-white truncate">{r.user_name}</div>
-              <div className="col-span-2 text-center">
-                <span className={`font-bold ${r.winRate >= 50 ? 'text-green-500' : 'text-red-500'}`}>
-                  {r.winRate}%
-                </span>
-                <span className="text-xs text-gray-400 block">{r.wins}/{r.total}</span>
+        <div className="space-y-2">
+          {rows.map((r, i) => {
+            const progress = levelProgress(r.points);
+            const lv = getLevel(r.points);
+            return (
+              <div
+                key={r.name}
+                className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 flex items-center gap-4 ${
+                  i < 3 ? 'ring-1 ring-amber-300 dark:ring-amber-700' : ''
+                }`}
+              >
+                <div className="text-xl font-black text-gray-400 w-7 text-center">{medal(i)}</div>
+                {r.avatar ? (
+                  <img src={r.avatar} alt={r.name} className="w-11 h-11 rounded-full" />
+                ) : (
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                    {r.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-gray-800 dark:text-white truncate">{r.name}</span>
+                    <span
+                      className="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{ backgroundColor: r.levelColor + '22', color: r.levelColor }}
+                    >
+                      {r.levelIcon} {r.level}
+                    </span>
+                  </div>
+                  {/* Thanh tiến độ lên cấp */}
+                  <div className="mt-1.5 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full" style={{ width: `${progress}%`, backgroundColor: r.levelColor }} />
+                  </div>
+                  <p className="text-[11px] text-gray-400 mt-0.5">
+                    {r.posts} tin • ✅{r.trueVotes} / ❌{r.falseVotes} • độ chính xác {r.accuracy}%
+                    {lv.next !== null && ` • còn ${Math.max(0, lv.next - r.points)} điểm lên cấp`}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-black" style={{ color: r.levelColor }}>{r.points}</div>
+                  <div className="text-[10px] text-gray-400">điểm</div>
+                </div>
               </div>
-              <div className="col-span-2 text-center text-sm text-gray-600 dark:text-gray-300">
-                {r.total}
-                <span className="text-[10px] text-gray-400 block">{r.long}L / {r.short}S</span>
-              </div>
-              <div className={`col-span-3 text-right font-bold ${r.avgReturn >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {r.avgReturn >= 0 ? '+' : ''}{r.avgReturn.toFixed(2)}%
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </AppShell>

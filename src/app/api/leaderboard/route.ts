@@ -1,99 +1,74 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { getLevel } from '@/lib/levels';
 
-// Lấy giá hiện tại theo symbol_id (crypto: Binance, vn: VNDirect)
-async function getCurrentPrice(symbolId: string): Promise<number | null> {
-  const [market, code] = symbolId.split(':');
-  try {
-    if (market === 'crypto') {
-      const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${code}`, { cache: 'no-store' });
-      const d = await r.json();
-      return d.price ? parseFloat(d.price) : null;
-    }
-    if (market === 'vn') {
-      const now = Math.floor(Date.now() / 1000);
-      const from = now - 60 * 60 * 24 * 14;
-      const r = await fetch(
-        `https://dchart-api.vndirect.com.vn/dchart/history?resolution=D&symbol=${code}&from=${from}&to=${now}`,
-        { cache: 'no-store' }
-      );
-      const d = await r.json();
-      if (d.s === 'ok' && d.c?.length) return d.c[d.c.length - 1];
-    }
-  } catch {}
-  return null;
-}
-
-interface Stat {
-  user_name: string;
-  total: number;
-  wins: number;
-  sumReturn: number;
-  long: number;
-  short: number;
-}
-
+// Bảng xếp hạng Cao thủ: điểm = (lượt "Đúng" - lượt "Sai") nhận được trên các tin đã đăng
 export async function GET() {
   try {
-    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    const { data, error } = await supabase
-      .from('chat_messages')
-      .select('user_name, symbol_id, sentiment, price_at_vote, created_at')
-      .not('sentiment', 'is', null)
-      .not('price_at_vote', 'is', null)
-      .gt('created_at', since)
-      .limit(3000);
+    // Lấy posts (để map post -> tác giả + avatar) và toàn bộ verdict
+    const [postsRes, verdictsRes] = await Promise.all([
+      supabase.from('posts').select('id, author_name, author_avatar').limit(5000),
+      supabase.from('post_verdicts').select('post_id, verdict').limit(20000),
+    ]);
 
-    if (error) throw error;
-    const votes = data || [];
+    const posts = postsRes.data || [];
+    const verdicts = verdictsRes.data || [];
 
-    // Lấy giá hiện tại cho từng symbol (1 lần mỗi mã)
-    const symbols = [...new Set(votes.map((v: any) => v.symbol_id))];
-    const priceMap = new Map<string, number | null>();
-    await Promise.all(
-      symbols.map(async (s) => priceMap.set(s, await getCurrentPrice(s)))
-    );
-
+    interface Stat {
+      name: string;
+      avatar: string | null;
+      posts: number;
+      trueVotes: number;
+      falseVotes: number;
+    }
     const stats = new Map<string, Stat>();
+    const postAuthor = new Map<string, { name: string; avatar: string | null }>();
 
-    for (const v of votes as any[]) {
-      const now = priceMap.get(v.symbol_id);
-      const entry = v.price_at_vote;
-      if (!now || !entry || entry <= 0) continue;
-
-      const change = (now - entry) / entry; // % thay đổi
-      const dir = v.sentiment === 'long' ? 1 : -1;
-      const ret = dir * change; // lợi nhuận theo hướng vote
-      const win = ret > 0;
-
-      let st = stats.get(v.user_name);
-      if (!st) {
-        st = { user_name: v.user_name, total: 0, wins: 0, sumReturn: 0, long: 0, short: 0 };
-        stats.set(v.user_name, st);
+    for (const p of posts) {
+      postAuthor.set(p.id, { name: p.author_name, avatar: p.author_avatar });
+      let s = stats.get(p.author_name);
+      if (!s) {
+        s = { name: p.author_name, avatar: p.author_avatar, posts: 0, trueVotes: 0, falseVotes: 0 };
+        stats.set(p.author_name, s);
       }
-      st.total += 1;
-      if (win) st.wins += 1;
-      st.sumReturn += ret;
-      if (v.sentiment === 'long') st.long += 1;
-      else st.short += 1;
+      s.posts += 1;
+      if (p.author_avatar && !s.avatar) s.avatar = p.author_avatar;
+    }
+
+    for (const v of verdicts) {
+      const author = postAuthor.get(v.post_id);
+      if (!author) continue;
+      const s = stats.get(author.name);
+      if (!s) continue;
+      if (v.verdict === 'true') s.trueVotes += 1;
+      else s.falseVotes += 1;
     }
 
     const leaderboard = [...stats.values()]
-      .filter((s) => s.total >= 3) // tối thiểu 3 kèo mới lên bảng
-      .map((s) => ({
-        user_name: s.user_name,
-        total: s.total,
-        wins: s.wins,
-        winRate: Math.round((s.wins / s.total) * 100),
-        avgReturn: (s.sumReturn / s.total) * 100, // %/kèo
-        long: s.long,
-        short: s.short,
-      }))
-      .sort((a, b) => b.winRate - a.winRate || b.total - a.total)
-      .slice(0, 50);
+      .map((s) => {
+        const points = s.trueVotes - s.falseVotes;
+        const totalVotes = s.trueVotes + s.falseVotes;
+        const accuracy = totalVotes ? Math.round((s.trueVotes / totalVotes) * 100) : 0;
+        const level = getLevel(points);
+        return {
+          name: s.name,
+          avatar: s.avatar,
+          posts: s.posts,
+          points,
+          trueVotes: s.trueVotes,
+          falseVotes: s.falseVotes,
+          accuracy,
+          level: level.name,
+          levelIcon: level.icon,
+          levelColor: level.color,
+        };
+      })
+      .filter((r) => r.posts > 0)
+      .sort((a, b) => b.points - a.points || b.accuracy - a.accuracy)
+      .slice(0, 100);
 
-    return NextResponse.json({ data: leaderboard, scoredUsers: stats.size });
-  } catch (error) {
-    return NextResponse.json({ data: [], error: 'failed' });
+    return NextResponse.json({ data: leaderboard });
+  } catch {
+    return NextResponse.json({ data: [] });
   }
 }

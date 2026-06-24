@@ -9,6 +9,7 @@ import NewsPanel from './NewsPanel';
 import SentimentGauge from './SentimentGauge';
 import MarketLongShort from './MarketLongShort';
 import RealtimeFlow from './RealtimeFlow';
+import HotRadar from './HotRadar';
 
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
@@ -84,6 +85,7 @@ export default function LiveDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 space-y-4">
           <PriceChart symbol={selected} onPrice={setPrice} />
+          <HotRadar symbol={selected} />
           <NewsPanel symbol={selected} />
         </div>
         <div className="lg:col-span-1">
