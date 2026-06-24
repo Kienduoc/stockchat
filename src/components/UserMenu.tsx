@@ -28,14 +28,16 @@ export default function UserMenu() {
 
   return (
     <div className="flex items-center gap-2">
-      {user.avatar ? (
-        <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full border-2 border-white/50" />
-      ) : (
-        <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center text-white font-bold text-sm">
-          {user.name.charAt(0).toUpperCase()}
-        </div>
-      )}
-      <span className="text-white text-sm font-medium hidden sm:block max-w-[120px] truncate">{user.name}</span>
+      <a href={`/u/${encodeURIComponent(user.name)}`} className="flex items-center gap-2" title="Tường cá nhân">
+        {user.avatar ? (
+          <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full border-2 border-white/50" />
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center text-white font-bold text-sm">
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <span className="text-white text-sm font-medium hidden sm:block max-w-[120px] truncate hover:underline">{user.name}</span>
+      </a>
       <button
         onClick={signOut}
         className="text-blue-100 hover:text-white text-xs underline"

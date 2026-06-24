@@ -86,7 +86,7 @@ export default function LeaderboardPage() {
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-gray-800 dark:text-white truncate">{r.name}</span>
+                    <a href={`/u/${encodeURIComponent(r.name)}`} className="font-bold text-gray-800 dark:text-white truncate hover:text-emerald-400 hover:underline">{r.name}</a>
                     <span
                       className="text-xs font-bold px-2 py-0.5 rounded-full"
                       style={{ backgroundColor: r.levelColor + '22', color: r.levelColor }}

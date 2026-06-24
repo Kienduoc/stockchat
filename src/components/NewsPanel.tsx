@@ -44,6 +44,19 @@ export default function NewsPanel({ symbol }: NewsPanelProps) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState<SortMode>('newest');
+  const [shared, setShared] = useState<{ id: string; author_name: string; author_avatar: string | null; content: string; created_at: string }[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadShared = () =>
+      fetch(`/api/shared-posts?symbol_id=${encodeURIComponent(symbol.id)}`)
+        .then((r) => r.json())
+        .then((d) => { if (!cancelled) setShared(d.data || []); })
+        .catch(() => {});
+    loadShared();
+    const iv = setInterval(loadShared, 30000);
+    return () => { cancelled = true; clearInterval(iv); };
+  }, [symbol.id]);
 
   const loadStats = async (list: Article[]) => {
     try {
@@ -139,6 +152,22 @@ export default function NewsPanel({ symbol }: NewsPanelProps) {
         <h3 className="font-bold text-gray-800 dark:text-white">📰 Tin tức — {symbol.ticker}</h3>
         <span className="text-xs text-gray-400">Cập nhật 15 phút/lần</span>
       </div>
+
+      {/* Tin cộng đồng đăng lên */}
+      {shared.length > 0 && (
+        <div className="mb-3 space-y-2">
+          {shared.map((s) => (
+            <div key={s.id} className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+              <div className="flex items-center gap-2 text-xs mb-1">
+                <span className="bg-emerald-500 text-slate-900 px-1.5 py-0.5 rounded font-bold text-[10px]">CỘNG ĐỒNG</span>
+                <a href={`/u/${encodeURIComponent(s.author_name)}`} className="font-semibold text-gray-700 dark:text-gray-200 hover:text-emerald-400">{s.author_name}</a>
+                <span className="text-gray-400">• {timeAgo(s.created_at)}</span>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap">{s.content}</p>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Bộ lọc */}
       <div className="flex gap-1 mb-3">

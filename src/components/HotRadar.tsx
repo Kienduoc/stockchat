@@ -17,6 +17,7 @@ interface Post {
   myVerdict: 'true' | 'false' | null;
   comments: number;
   interactions: number;
+  shared_to_news?: boolean;
 }
 
 interface Comment {
@@ -153,6 +154,28 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
     } catch {}
   };
 
+  // Chia sẻ (repost) bài người khác về tường mình
+  const repost = async (p: Post) => {
+    if (!myName) return alert('Đăng nhập/nhập tên để chia sẻ về tường.');
+    const res = await fetch('/api/repost', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_name: myName, post_id: p.id, action: 'repost' }),
+    }).then((r) => r.json()).catch(() => null);
+    if (res?.ok) alert('✅ Đã chia sẻ về tường của bạn!');
+  };
+
+  // Bật/tắt đăng tin lên mục Tin tức theo mã (chỉ tác giả)
+  const toggleNews = async (p: Post) => {
+    const next = !p.shared_to_news;
+    setPosts((prev) => prev.map((x) => (x.id === p.id ? { ...x, shared_to_news: next } : x)));
+    await fetch('/api/post-share-news', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ post_id: p.id, shared: next }),
+    }).catch(() => {});
+  };
+
   const sorted = [...posts].sort((a, b) => {
     if (sort === 'interest') return b.likes - a.likes;
     if (sort === 'interaction') return b.interactions - a.interactions;
@@ -236,7 +259,9 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
                   <Avatar name={p.author_name} avatar={p.author_avatar} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="font-semibold text-gray-800 dark:text-white">{p.author_name}</span>
+                      <a href={`/u/${encodeURIComponent(p.author_name)}`} className="font-semibold text-gray-800 dark:text-white hover:text-emerald-400 hover:underline">
+                        {p.author_name}
+                      </a>
                       <span className="text-gray-400 text-xs" title={fmtExact(p.created_at)}>• {timeAgo(p.created_at)} · {fmtExact(p.created_at)}</span>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-200 mt-1 whitespace-pre-wrap break-words">{p.content}</p>
@@ -268,9 +293,21 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
                       <button onClick={() => setOpenId(openId === p.id ? null : p.id)} className="text-gray-500 dark:text-gray-400">
                         💬 {p.comments}
                       </button>
+                      <button onClick={() => repost(p)} className="text-cyan-600 dark:text-cyan-400" title="Chia sẻ về tường cá nhân">
+                        🔁 Về tường
+                      </button>
                       <button onClick={() => share(p)} className="text-gray-500 dark:text-gray-400">
                         ↗ Chia sẻ
                       </button>
+                      {p.author_name === myName && (
+                        <button
+                          onClick={() => toggleNews(p)}
+                          className={`px-2 py-0.5 rounded font-medium ${p.shared_to_news ? 'bg-amber-500 text-slate-900' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'}`}
+                          title="Đăng tin này lên mục Tin tức của mã"
+                        >
+                          📰 {p.shared_to_news ? 'Đã lên Tin tức' : 'Lên Tin tức'}
+                        </button>
+                      )}
                     </div>
 
                     {openId === p.id && <Discussion postId={p.id} myName={myName} avatar={user?.avatar || null} onChange={load} />}
