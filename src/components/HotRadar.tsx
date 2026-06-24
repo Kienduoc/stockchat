@@ -133,7 +133,7 @@ export default function HotRadar({ symbol }: { symbol: SymbolConfig }) {
 
   const share = async (p: Post) => {
     const text = `[${symbol.ticker}] ${p.content} — qua StockChat VN`;
-    const url = typeof window !== 'undefined' ? window.location.origin + `/?symbol=${symbol.id}` : '';
+    const url = typeof window !== 'undefined' ? window.location.origin + `/app?symbol=${symbol.id}` : '';
     try {
       if (navigator.share) await navigator.share({ title: 'StockChat VN', text, url });
       else {

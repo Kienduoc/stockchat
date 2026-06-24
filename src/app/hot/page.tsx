@@ -109,7 +109,7 @@ export default function HotPage() {
               return (
                 <a
                   key={p.id}
-                  href={`/?symbol=${encodeURIComponent(p.symbol_id)}`}
+                  href={`/app?symbol=${encodeURIComponent(p.symbol_id)}`}
                   className="block bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-amber-400 transition-colors"
                 >
                   <div className="flex gap-3">
@@ -150,7 +150,7 @@ export default function HotPage() {
             return (
               <a
                 key={it.symbolId}
-                href={`/?symbol=${encodeURIComponent(it.symbolId)}`}
+                href={`/app?symbol=${encodeURIComponent(it.symbolId)}`}
                 className="block bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-amber-400 transition-colors"
               >
                 <div className="flex items-center gap-4">

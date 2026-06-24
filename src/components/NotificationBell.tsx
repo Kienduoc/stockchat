@@ -95,7 +95,7 @@ export default function NotificationBell() {
             items.map((n) => (
               <a
                 key={n.id}
-                href={`/?symbol=${encodeURIComponent(n.symbol_id)}`}
+                href={`/app?symbol=${encodeURIComponent(n.symbol_id)}`}
                 className="block px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-900 border-b border-gray-50 dark:border-gray-700/50"
               >
                 <div className="flex items-center gap-2 text-xs">

@@ -2,7 +2,7 @@ import UserMenu from "@/components/UserMenu";
 import NotificationBell from "@/components/NotificationBell";
 
 const NAV = [
-  { href: "/", label: "Chart", icon: "📊" },
+  { href: "/app", label: "Chart", icon: "📊" },
   { href: "/hot", label: "Tin Nóng", icon: "🔥" },
   { href: "/leaderboard", label: "Cao thủ", icon: "🏆" },
   { href: "/news", label: "Tin tức", icon: "📰" },
@@ -15,7 +15,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <a href="/landing" className="flex items-center gap-2 shrink-0">
+            <a href="/" className="flex items-center gap-2 shrink-0">
               <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-lg shadow-lg shadow-emerald-500/30">📈</span>
               <span className="font-display text-xl font-extrabold text-white hidden sm:block">
                 StockChat <span className="text-emerald-400">VN</span>

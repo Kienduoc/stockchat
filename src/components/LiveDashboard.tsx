@@ -11,6 +11,7 @@ import MarketLongShort from './MarketLongShort';
 import RealtimeFlow from './RealtimeFlow';
 import HotRadar from './HotRadar';
 import WatchButton from './WatchButton';
+import MyWatchlist from './MyWatchlist';
 
 export default function LiveDashboard() {
   const [selected, setSelected] = useState<SymbolConfig>(VN_SYMBOLS[0]);
@@ -59,9 +60,12 @@ export default function LiveDashboard() {
       {/* Ô tìm kiếm đầy đủ */}
       <SymbolSearch market={tab} onSelect={setSelected} />
 
+      {/* Watchlist riêng của tài khoản */}
+      <MyWatchlist selectedId={selected.id} onSelect={setSelected} />
+
       {/* Mã phổ biến */}
       <div>
-        <p className="text-xs text-gray-400 mb-2">⭐ Phổ biến (hoặc tìm bất kỳ mã nào ở trên)</p>
+        <p className="text-xs text-gray-400 mb-2">🔥 Phổ biến (hoặc tìm bất kỳ mã nào ở trên)</p>
         <div className="flex gap-2 flex-wrap">
         {list.map((s) => (
           <button
