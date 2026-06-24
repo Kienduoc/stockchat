@@ -15,8 +15,6 @@ const security = [
   { icon: '⚡', title: 'Dữ liệu nguồn chính thống', desc: 'Giá từ VNDirect & Binance — minh bạch, real-time, không qua trung gian.' },
 ];
 
-const wallets = ['🦊 MetaMask', '🔵 Coinbase', '🟣 Phantom', '🔗 WalletConnect', '🏦 VNDirect', '💳 SSI'];
-
 export default function LandingPage() {
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -127,26 +125,6 @@ export default function LandingPage() {
                 <p className="text-slate-400 text-sm">{s.desc}</p>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Wallet showcase */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-          <div className="glass rounded-2xl p-8 md:p-12 text-center">
-            <div className="inline-flex items-center gap-2 bg-cyan-500/20 rounded-full px-4 py-1.5 mb-4 text-sm text-cyan-300">
-              🔜 Sắp ra mắt
-            </div>
-            <h2 className="text-3xl font-bold mb-3 text-white">Kết nối ví &amp; tài khoản chứng khoán</h2>
-            <p className="text-slate-400 max-w-2xl mx-auto mb-8">
-              Theo dõi danh mục, đặt lệnh nhanh, đồng bộ tài sản — tất cả trong một nơi an toàn.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {wallets.map((w) => (
-                <div key={w} className="glass rounded-xl px-5 py-3 text-slate-200 font-medium transition-all hover:scale-105">
-                  {w}
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 

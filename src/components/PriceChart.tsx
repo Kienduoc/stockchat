@@ -18,18 +18,28 @@ interface PriceChartProps {
 }
 
 const CRYPTO_INTERVALS = [
+  { value: '1s', label: '1 giây' },
   { value: '1m', label: '1 phút' },
+  { value: '3m', label: '3 phút' },
   { value: '5m', label: '5 phút' },
   { value: '15m', label: '15 phút' },
+  { value: '30m', label: '30 phút' },
   { value: '1h', label: '1 giờ' },
+  { value: '2h', label: '2 giờ' },
   { value: '4h', label: '4 giờ' },
+  { value: '6h', label: '6 giờ' },
+  { value: '12h', label: '12 giờ' },
   { value: '1d', label: '1 ngày' },
+  { value: '3d', label: '3 ngày' },
+  { value: '1w', label: '1 tuần' },
+  { value: '1M', label: '1 tháng' },
 ];
 
 const VN_INTERVALS = [
   { value: '1m', label: '1 phút' },
   { value: '5m', label: '5 phút' },
   { value: '15m', label: '15 phút' },
+  { value: '30m', label: '30 phút' },
   { value: '1h', label: '1 giờ' },
   { value: '1d', label: '1 ngày' },
 ];
